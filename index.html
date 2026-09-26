@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>a gift for u</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #0b0a10;
+    --gold: #cba25a;
+    --cream: #f4ecdd;
+    --lily-shadow: #d8cdb8;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html,body{
+    height: 100%;
+    margin: 0;
+    background: var(--bg-deep);
+    overflow: hidden;
+    font-family: 'EB Garamond', Georgia, serif;
+  }
+
+  .stage-root{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(40,40,40,0.5), transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.7), transparent 70%),
+      var(--bg-deep);
+    color: var(--cream);
+    text-align: center;
+    padding: 24px;
+  }
+
+  .dust{ position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .dust span{
+    position: absolute; width: 3px; height: 3px; border-radius: 50%;
+    background: var(--gold); opacity: 0.35; animation: drift 14s linear infinite;
+  }
+  @keyframes drift{
+    from{ transform: translateY(110vh) translateX(0); opacity: 0; }
+    10%{ opacity: 0.5; } 90%{ opacity: 0.4; }
+    to{ transform: translateY(-10vh) translateX(20px); opacity: 0; }
+  }
+
+  .message{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    letter-spacing: 0.02em;
+    color: var(--cream);
+    margin: 0 0 40px;
+    min-height: 1.4em;
+    text-shadow: 0 0 18px rgba(203,162,90,0.15);
+    transition: opacity 0.5s ease;
+  }
+
+  .box-wrap{
+    position: relative;
+    width: min(280px, 62vw);
+    height: min(260px, 56vw);
+    overflow: visible;
+  }
+
+  svg{ overflow: visible; display: block; }
+
+  .lid-group{
+    transform-origin: 130px 100px;
+    transition: transform 0.65s cubic-bezier(.55,0,.85,.4), opacity 0.4s ease 0.5s;
+  }
+  .box-wrap.stage1 .lid-group,
+  .box-wrap.stage2 .lid-group{
+    transform: translate(78px, 118px) rotate(100deg);
+    opacity: 0.92;
+  }
+
+  .box-group{
+    transform-origin: 130px 200px;
+    transition: transform 0.75s cubic-bezier(.6,0,.85,.4), opacity 0.6s ease;
+  }
+  .box-wrap.stage2 .box-group{
+    transform: translate(-34px, 38px) rotate(88deg);
+    opacity: 0.85;
+  }
+
+  .bouquet{
+    opacity: 0;
+    transform: translateY(74px) scale(0.88);
+    transform-origin: 130px 190px;
+    transition: transform 0.9s cubic-bezier(.25,1.2,.35,1), opacity 0.3s ease;
+  }
+  .box-wrap.stage1 .bouquet{
+    opacity: 1;
+    transform: translateY(16px) scale(0.95);
+  }
+  .box-wrap.stage2 .bouquet{
+    opacity: 1;
+    transform: translateY(-64px) scale(1.05);
+  }
+
+  .lily{ transform-origin: center; }
+  .petal-shimmer{ animation: shimmer 5s ease-in-out infinite; }
+  @keyframes shimmer{
+    0%, 100%{ filter: brightness(1); }
+    50%{ filter: brightness(1.08); }
+  }
+
+  .bouquet-hit{
+    pointer-events: none;
+    cursor: default;
+  }
+  .box-wrap.stage1 .bouquet-hit{
+    pointer-events: all;
+    cursor: pointer;
+  }
+
+  .press-label{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    fill: var(--cream);
+    letter-spacing: 0.06em;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.55s;
+    pointer-events: none;
+  }
+  .box-wrap.stage1 .press-label{
+    opacity: 0.9;
+    animation: pulse 1.7s ease-in-out infinite 1s;
+  }
+  @keyframes pulse{
+    0%, 100%{ opacity: 0.55; }
+    50%{ opacity: 1; }
+  }
+
+  .glow{ opacity: 0; transition: opacity 0.9s ease 0.3s; }
+  .box-wrap.stage2 .glow{ opacity: 1; }
+
+  .sparkle{ opacity: 0; transform: scale(0); }
+  .box-wrap.stage2 .sparkle{ animation: pop 1.6s ease forwards var(--sdelay, 0.6s); }
+  @keyframes pop{
+    0%{ opacity: 0; transform: scale(0); }
+    40%{ opacity: 1; transform: scale(1); }
+    100%{ opacity: 0; transform: scale(0.6) translateY(-14px); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="stage-root">
+    <div class="dust" id="dust"></div>
+
+    <p class="message" id="message">i have a gift for u</p>
+
+    <div class="box-wrap" id="boxWrap">
+      <svg viewBox="0 0 260 240" width="100%" height="100%">
+        <defs>
+          <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#cba25a" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#cba25a" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="boxGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2a2a2a"/>
+            <stop offset="100%" stop-color="#111111"/>
+          </linearGradient>
+          <linearGradient id="lidGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#343434"/>
+            <stop offset="100%" stop-color="#161616"/>
+          </linearGradient>
+        </defs>
+
+        <ellipse class="glow" cx="130" cy="150" rx="95" ry="40" fill="url(#glowGrad)"/>
+
+        <!-- bouquet: painted before the box, so the box's front face hides its lower half until it rises clear -->
+        <g class="bouquet">
+          <path d="M130 200 C 126 168, 122 146, 108 122" stroke="#4c6b4a" stroke-width="3" fill="none" stroke-linecap="round" transform="rotate(-6 130 200)"/>
+          <path d="M130 200 C 130 166, 130 138, 130 104" stroke="#4c6b4a" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M130 200 C 134 168, 140 146, 154 122" stroke="#4c6b4a" stroke-width="3" fill="none" stroke-linecap="round" transform="rotate(6 130 200)"/>
+
+          <g class="lily petal-shimmer" transform="translate(108 108)">
+            <path d="M0 0 C -18 -6, -26 -22, -10 -34 C -4 -22, -2 -10, 0 0 Z" fill="#faf7ef"/>
+            <path d="M0 0 C 10 -14, 8 -30, -6 -38 C -10 -26, -8 -12, 0 0 Z" fill="#f2ead8"/>
+            <path d="M0 0 C 18 -8, 24 -24, 8 -36 C 4 -22, 2 -10, 0 0 Z" fill="#faf7ef"/>
+            <path d="M0 0 C 4 -14, 14 -26, 2 -40 C -6 -28, -4 -12, 0 0 Z" fill="#efe6d2"/>
+            <circle cx="0" cy="-2" r="2.4" fill="#cba25a"/>
+            <line x1="0" y1="-2" x2="4" y2="-10" stroke="#b8863f" stroke-width="1"/>
+            <line x1="0" y1="-2" x2="-4" y2="-9" stroke="#b8863f" stroke-width="1"/>
+          </g>
+
+          <g class="lily petal-shimmer" transform="translate(130 90)">
+            <path d="M0 0 C -22 -8, -32 -28, -12 -42 C -5 -28, -2 -12, 0 0 Z" fill="#faf7ef"/>
+            <path d="M0 0 C 12 -18, 10 -36, -8 -46 C -12 -32, -9 -14, 0 0 Z" fill="#f2ead8"/>
+            <path d="M0 0 C 22 -10, 30 -30, 10 -44 C 5 -28, 2 -12, 0 0 Z" fill="#faf7ef"/>
+            <path d="M0 0 C 5 -18, 17 -32, 3 -48 C -7 -34, -4 -14, 0 0 Z" fill="#efe6d2"/>
+            <path d="M0 0 C -2 -22, 2 -22, 0 -46 C -2 -22, 2 -22, 0 0 Z" fill="#fffdf8"/>
+            <circle cx="0" cy="-3" r="3" fill="#cba25a"/>
+            <line x1="0" y1="-3" x2="6" y2="-14" stroke="#b8863f" stroke-width="1.2"/>
+            <line x1="0" y1="-3" x2="-6" y2="-13" stroke="#b8863f" stroke-width="1.2"/>
+            <line x1="0" y1="-3" x2="1" y2="-16" stroke="#b8863f" stroke-width="1.2"/>
+          </g>
+
+          <g class="lily petal-shimmer" transform="translate(154 108)">
+            <path d="M0 0 C 18 -6, 26 -22, 10 -34 C 4 -22, 2 -10, 0 0 Z" fill="#faf7ef"/>
+            <path d="M0 0 C -10 -14, -8 -30, 6 -38 C 10 -26, 8 -12, 0 0 Z" fill="#f2ead8"/>
+            <path d="M0 0 C -18 -8, -24 -24, -8 -36 C -4 -22, -2 -10, 0 0 Z" fill="#faf7ef"/>
+            <path d="M0 0 C -4 -14, -14 -26, -2 -40 C 6 -28, 4 -12, 0 0 Z" fill="#efe6d2"/>
+            <circle cx="0" cy="-2" r="2.4" fill="#cba25a"/>
+            <line x1="0" y1="-2" x2="4" y2="-10" stroke="#b8863f" stroke-width="1"/>
+            <line x1="0" y1="-2" x2="-4" y2="-9" stroke="#b8863f" stroke-width="1"/>
+          </g>
+
+          <path d="M130 160 C 118 156, 110 162, 106 172" stroke="#3f5a3e" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M130 168 C 142 164, 150 170, 154 180" stroke="#3f5a3e" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <!-- invisible hit area over the peeking lily heads for the second click -->
+        <rect class="bouquet-hit" x="82" y="40" width="96" height="90" fill="transparent"/>
+
+        <text class="press-label" x="130" y="34" text-anchor="middle">press</text>
+
+        <g fill="#cba25a">
+          <circle class="sparkle" style="--sdelay:0.55s" cx="86" cy="92" r="2.4"/>
+          <circle class="sparkle" style="--sdelay:0.8s" cx="176" cy="86" r="2"/>
+          <circle class="sparkle" style="--sdelay:1s" cx="130" cy="50" r="2.6"/>
+          <circle class="sparkle" style="--sdelay:0.7s" cx="150" cy="130" r="1.8"/>
+          <circle class="sparkle" style="--sdelay:0.9s" cx="100" cy="128" r="1.8"/>
+        </g>
+
+        <!-- box base + ribbon, painted after the bouquet so it hides the stems until the box falls away -->
+        <g class="box-group">
+          <rect x="55" y="120" width="150" height="80" rx="4" fill="url(#boxGrad)" stroke="#000000" stroke-width="1.5"/>
+          <rect x="120" y="120" width="20" height="80" fill="#cba25a"/>
+          <rect x="55" y="152" width="150" height="16" fill="#cba25a"/>
+        </g>
+
+        <!-- lid, on top, falls away on first press -->
+        <g class="lid-group">
+          <rect x="48" y="98" width="164" height="30" rx="5" fill="url(#lidGrad)" stroke="#000000" stroke-width="1.5"/>
+          <rect x="120" y="98" width="20" height="30" fill="#cba25a" opacity="0.9"/>
+          <g transform="translate(130 96)">
+            <path d="M0 0 C -14 -14, -30 -10, -22 4 C -14 12, -6 6, 0 0 Z" fill="#cba25a"/>
+            <path d="M0 0 C 14 -14, 30 -10, 22 4 C 14 12, 6 6, 0 0 Z" fill="#cba25a"/>
+            <circle cx="0" cy="0" r="5" fill="#e8c583"/>
+            <path d="M-4 4 C -8 16, -14 22, -10 32 C -4 24, -2 14, -4 4 Z" fill="#b8863f"/>
+            <path d="M4 4 C 8 16, 14 22, 10 32 C 4 24, 2 14, 4 4 Z" fill="#b8863f"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+<script>
+  const wrap = document.getElementById('boxWrap');
+  const message = document.getElementById('message');
+  let stage = 0;
+
+  wrap.addEventListener('click', (e) => {
+    if (stage === 0) {
+      stage = 1;
+      wrap.classList.add('stage1');
+      message.style.opacity = 0;
+      setTimeout(() => { message.textContent = ''; message.style.opacity = 1; }, 500);
+    } else if (stage === 1 && e.target.closest('.bouquet-hit')) {
+      stage = 2;
+      wrap.classList.remove('stage1');
+      wrap.classList.add('stage2');
+      message.style.opacity = 0;
+      setTimeout(() => {
+        message.textContent = 'thanks for being part of my life';
+        message.style.opacity = 1;
+      }, 400);
+    }
+  });
+
+  const dustEl = document.getElementById('dust');
+  for (let i = 0; i < 22; i++) {
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 14) + 's';
+    s.style.animationDuration = (10 + Math.random() * 8) + 's';
+    s.style.width = s.style.height = (1.5 + Math.random() * 2.5) + 'px';
+    dustEl.appendChild(s);
+  }
+</script>
+</body>
+</html>
